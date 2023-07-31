@@ -1,0 +1,100 @@
+using System;
+
+class HumanPlayer
+{
+    private int points;
+    public HumanPlayer(int initial)
+    {
+        points = initial;
+    }
+    public int GetPoints()
+    {
+        return points;
+    }
+    public void WinRound()
+    {
+        points += 5;
+    }
+    public void LoseRound()
+    {
+        points -= 5;
+    }
+    public string HumanDecision()
+    {
+        Console.WriteLine("Please Input your choice: rock, paper or scissors.");
+        string decision = Console.ReadLine();
+        return decision;
+    }
+}
+
+class ComputerPlayer
+{
+    private static Random random = new Random();
+
+    public string ComputerDecision()
+    {
+        int decisionNum = random.Next(3);
+        switch (decisionNum)
+        {
+            case 0:
+                return "rock";
+            case 1:
+                return "paper";
+            default:
+                return "scissors";
+        }
+    }
+}
+
+class RockPaperScissors
+{
+    static void Main()
+    {
+        Console.WriteLine("****Rock, Paper, Scissors Start!****");
+        int initialPoints = 5;
+
+        HumanPlayer humanPlayer = new HumanPlayer(initialPoints);
+        ComputerPlayer computerPlayer = new ComputerPlayer();
+
+        while (humanPlayer.GetPoints() > 0)
+        {
+            Console.WriteLine("Your Points: " + humanPlayer.GetPoints());
+            string humanDecision = humanPlayer.HumanDecision();
+            string computerDecision = computerPlayer.ComputerDecision();
+
+            Console.WriteLine("Computer's Decision: " + computerDecision);
+
+            if (humanDecision == computerDecision)
+            {
+                Console.WriteLine("It's a tie!");
+            }
+            else if ((humanDecision == "rock" && computerDecision == "scissors") ||
+                     (humanDecision == "paper" && computerDecision == "rock") ||
+                     (humanDecision == "scissors" && computerDecision == "paper"))
+            {
+                Console.WriteLine("You win!");
+                humanPlayer.WinRound();
+            }
+            else
+            {
+                Console.WriteLine("You lose!");
+                humanPlayer.LoseRound();
+            }
+
+            Console.WriteLine();
+
+            if (humanPlayer.GetPoints() <= 0)
+            {
+                Console.WriteLine("Sorry, you don't have enough points, thanks for playing!");
+                break;
+            }
+
+            Console.WriteLine("Play again? Input yes to continue, or no to exit.");
+            string choice = Console.ReadLine().ToLower();
+            if (choice != "yes")
+                break;
+        }
+
+        Console.WriteLine("Thank you for playing Rock Paper Scissors!");
+    }
+}
