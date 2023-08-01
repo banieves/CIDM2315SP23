@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Student
+{
+    public int studentID;
+    public string studentName;
+    public double gpa;
+
+    public static List<Student> studentList = new List<Student>();
+
+    public Student(int id, string name)
+    {
+        studentID = id;
+        studentName = name;
+        studentList.Add(this);
+    }
+
+    public double GPA
+    {
+        get { return gpa; }
+        set { gpa = value; }
+    }
+
+    public void PrintInfo()
+    {
+        Console.WriteLine($"Student ID: {studentID}, Student Name: {studentName}, GPA: {gpa}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Step 2: Create 4 students
+        Student student1 = new Student(111, "Alice");
+        Student student2 = new Student(222, "Bob");
+        Student student3 = new Student(333, "Cathy");
+        Student student4 = new Student(444, "David");
+
+        // Step 3: Create a Dictionary named gradebook to hold the student's names and the GPAs
+        Dictionary<string, double> gradebook = new Dictionary<string, double>
+        {
+            { "Alice", 4.0 },
+            { "Bob", 3.6 },
+            { "Cathy", 2.5 },
+            { "David", 1.8 }
+        };
+
+        // Step 4: Check if "Tom" has a record in gradebook. If not, insert Tom into the gradebook with a GPA of 3.3
+        if (!gradebook.ContainsKey("Tom"))
+        {
+            gradebook.Add("Tom", 3.3);
+        }
+
+        // Step 5: Calculate the average GPA of all students
+        double averageGPA = gradebook.Values.Average();
+
+        // Step 6: Print out information about students whose GPA is greater than the average GPA
+        Console.WriteLine("Average GPA: " + averageGPA);
+        Console.WriteLine("Students with GPA greater than the average:");
+
+        foreach (var entry in gradebook)
+        {
+            string name = entry.Key;
+            double gpa = entry.Value;
+
+            if (gpa > averageGPA)
+            {
+                Student student = Student.studentList.Find(s => s.studentName == name);
+                if (student != null)
+                {
+                    Console.WriteLine($"Student ID: {student.studentID}, Student Name: {student.studentName}, GPA: {gpa}");
+                }
+            }
+        }
+    }
+}
